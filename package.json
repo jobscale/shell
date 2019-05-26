@@ -10,6 +10,6 @@
   "author": "jobscale <jobscale@jsx.jp>",
   "license": "MIT",
   "dependencies": {
-    "modules": "github:jobscale/core"
+    "core": "github:jobscale/core"
   }
 }

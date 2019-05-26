@@ -1,4 +1,4 @@
-require('modules');
+require('core');
 const { spawn, exec } = require('child_process');
 
 class Shell {
