@@ -2,21 +2,13 @@ require('core');
 const { spawn, exec } = require('child_process');
 
 class Shell {
-  promise() {
-    const promise = {};
-    promise.suspend = new Promise((resolve, reject) => {
-      promise.resolve = resolve;
-      promise.reject = reject;
-    });
-    return promise;
-  }
   exec(cmd) {
-    const promise = promiseGen();
-    exec(cmd, (e, stdout) => e ? promise.reject(e) : promise.resolve(stdout));
-    return promise.instance;
+    const { pending, resolve, reject } = promiseGen();
+    exec(cmd, (e, stdout) => e ? reject(e) : resolve(stdout));
+    return pending;
   }
   spawn(command, params, options) {
-    const { suspend, resolve } = this.promise();
+    const { pending, resolve } = promiseGen();
     const { res } = options || {};
     const result = [];
     const proc = spawn(command, params, Object.assign({ shell: true }, options));
@@ -34,7 +26,7 @@ class Shell {
       clearTimeout(this.timer);
       resolve(result.join(''));
     });
-    return suspend;
+    return pending;
   }
 }
 module.exports = {
