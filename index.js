@@ -1,14 +1,17 @@
-require('core');
 const { spawn, exec } = require('child_process');
+
+const logger = console;
 
 class Shell {
   exec(cmd) {
-    const { pending, resolve, reject } = promiseGen();
-    exec(cmd, (e, stdout) => e ? reject(e) : resolve(stdout));
-    return pending;
+    const prom = {};
+    prom.pending = new Promise((...args) => { [prom.resolve, prom.reject] = args; });
+    exec(cmd, (e, stdout) => e ? prom.reject(e) : prom.resolve(stdout));
+    return prom.pending;
   }
   spawn(command, params, options) {
-    const { pending, resolve } = promiseGen();
+    const prom = {};
+    prom.pending = new Promise((...args) => { [prom.resolve, prom.reject] = args; });
     const { res } = options || {};
     const result = [];
     const proc = spawn(command, params, Object.assign({ shell: true }, options));
@@ -24,9 +27,9 @@ class Shell {
     proc.on('close', code => {
       logger.info(`child process exited with code ${code}`);
       clearTimeout(this.timer);
-      resolve(result.join(''));
+      prom.resolve(result.join(''));
     });
-    return pending;
+    return prom.pending;
   }
 }
 module.exports = {

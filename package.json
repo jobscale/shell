@@ -1,15 +1,14 @@
 {
-  "name": "shell",
-  "version": "1.0.0",
-  "description": "",
+  "name": "@jobscale/shell",
+  "version": "0.0.1",
+  "description": "shell exec spawn",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "jobscale <jobscale@jsx.jp>",
+  "author": "jobscale <jobscale@users.noreply.github.com>",
   "license": "MIT",
   "dependencies": {
-    "core": "github:jobscale/core"
   }
 }
